@@ -14,16 +14,12 @@ class Solution {
         for (int i = 0; i < park.length; i++) {
             for (int j = 0; j < park[0].length(); j++) {
                 parkMatrix[i][j] = park[i].charAt(j);
-                System.out.print(parkMatrix[i][j] + " ");
                 if (parkMatrix[i][j] == 'S') {
                     start[0] = i;
                     start[1] = j;
                 }
             }
-            System.out.println();
         }
-
-        System.out.println("start = " + Arrays.toString(start));
 
         for (int i = 0; i < routes.length; i++) {
             String[] route = routes[i].split(" ");
@@ -42,7 +38,6 @@ class Solution {
 
             start[0] = temp[0];
             start[1] = temp[1];
-            System.out.println(Arrays.toString(start));
         }
         
         return start;
