@@ -1,20 +1,16 @@
 class Solution {
     public int[] solution(String s) {
-        int removeZeroCount = 0;
-        int repeatCount = 0;
-        String temp = s;
-        int curLength = s.length();
-        
-        while (temp.length() > 1) {
-            int curRemoved = 0;
-            for (int i = temp.length() - 1; i >= 0; i--) {
-                if (temp.charAt(i) == '0') curRemoved++;
-            }
-            removeZeroCount += curRemoved;
-            temp = Integer.toString(curLength - curRemoved, 2);
-            curLength = temp.length();
-            repeatCount++;
+        int[] answer = new int[2];
+        int temp;
+
+        while (!s.equals("1")) {
+            answer[1] += s.length();
+            s = s.replaceAll("0", "");
+            temp = s.length();
+            s = Integer.toBinaryString(temp);
+            answer[0]++;
+            answer[1] -= temp;
         }
-        return new int[]{repeatCount, removeZeroCount};
+        return answer;
     }
 }
