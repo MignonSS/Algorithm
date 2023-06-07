@@ -3,14 +3,18 @@ class Solution {
     public int solution(int[] elements) {
 
         Set<Integer> sums = new HashSet<>();
+        int start = 0;
 
-        for (int elCount = 1; elCount <= elements.length; elCount++) {
-            for (int startIdx = 0; startIdx < elements.length; startIdx++) {
-                int sum = 0;
-                for (int toAddIdx = startIdx; toAddIdx < startIdx + elCount; toAddIdx++) {
-                    sum += elements[toAddIdx%(elements.length)];
-                }
+        for (int i = 0; i < elements.length; i++) {
+            int n = 1;
+            int idx = i;
+            int sum = 0;
+
+            while (n <= elements.length) {
+                sum += elements[idx++];
                 sums.add(sum);
+                if (idx >= elements.length) idx = 0;
+                n++;
             }
         }
         return sums.size();
