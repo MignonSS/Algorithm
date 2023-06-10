@@ -3,26 +3,22 @@ class Solution {
     public int solution(int k, int[] tangerine) {
         if (k == 1) return 1;
 
-        Map<Integer, Integer> map = new HashMap<>();
+        int[] count = new int[10_000_001];
+        int total = k;
 
-        for (int size : tangerine) {
-            if (!map.containsKey(size)) {
-                map.put(size, 1);
-            } else {
-                map.replace(size, map.get(size) + 1);
-            }
+        for (int i = 0; i < tangerine.length; i++) {
+            count[tangerine[i]]++;
+            if (count[tangerine[i]] == k) return 1;
         }
 
-        ArrayList<Integer> list = new ArrayList<>(map.values());
-        list.sort(Comparator.reverseOrder());
+        Arrays.sort(count);
+
+        int answer = 0;
+        for (int i = 0; total > 0; i++) {
+            total -= count[10000000 - i];
+            answer++;
+        }
         
-        int sum = 0;
-
-        for (int i = 0; i < list.size(); i++) {
-            sum += list.get(i);
-            if (sum >= k) return i + 1;
-        }
-
-        return list.size();
+        return answer;
     }
 }
