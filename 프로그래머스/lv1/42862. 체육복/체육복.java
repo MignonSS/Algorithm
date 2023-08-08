@@ -1,39 +1,25 @@
 import java.util.*;
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-        if (lost.length == 0) return n;
-        if (reserve.length == 0) return n - lost.length;
+        int[] check = new int[n + 1];
+        int notBorrow = 0;
 
-        boolean[] rNums = new boolean[n + 2];
-        for (int num : reserve) rNums[num] = true;
+        for (int i : lost) check[i]--;
 
-        Arrays.sort(lost);
+        for (int i : reserve) check[i]++;
 
-        int lostStudentCount = lost.length;
-
-        for (int i = 0; i < lost.length; i++) {
-            if (rNums[lost[i]]) {
-                lostStudentCount--;
-                rNums[lost[i]] = false;
-                lost[i] = 0;
+        for (int i = 1; i <= n; i++) {
+            if (check[i] == -1 && check[i - 1] == 1) {
+                check[i]++;
+                check[i - 1]--;
+            } else if (check[i] == -1 && i < n && check[i + 1] == 1) {
+                check[i]++;
+                check[i + 1]--;
             }
+
+            if (check[i] == -1) notBorrow++;
         }
-        
-        for (int i : lost) {
 
-            if (i == 0) continue;
-
-            if (rNums[i-1]) {
-                rNums[i-1] = false;
-                lostStudentCount--;
-                continue;
-            }
-
-            if (rNums[i+1]) {
-                rNums[i+1] = false;
-                lostStudentCount--;
-            }
-        }
-        return n - lostStudentCount;
+        return n - notBorrow;
     }
 }
