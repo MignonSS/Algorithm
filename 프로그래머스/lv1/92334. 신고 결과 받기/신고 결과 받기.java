@@ -2,39 +2,30 @@ import java.util.*;
 class Solution {
     public int[] solution(String[] id_list, String[] report, int k) {
         Map<String, Integer> reportedCount = new HashMap<>();
-        Map<String, HashSet<String>> myReportList = new HashMap<>();
-
+        Map<String, HashSet<String>> myReportIds = new HashMap<>();
+        HashSet<String> banList = new HashSet<>();
+        
         Arrays.stream(report)
-                .distinct()
+                .distinct() // 한 유저가 동일한 아이디를 신고하는 경우 제외
                 .map(str -> str.split(" "))
                 .forEach(arr -> {
-                    if (arr[0].equals(arr[1])) return;
-                    if (!reportedCount.containsKey(arr[1])) {
-                        reportedCount.put(arr[1], 1);
-                    } else {
-                        reportedCount.replace(arr[1], reportedCount.get(arr[1]) + 1);
-                    }
-                    if (!myReportList.containsKey(arr[0])) {
-                        myReportList.put(arr[0], new HashSet<>(List.of(arr[1])));
-                    } else {
-                        myReportList.get(arr[0]).add(arr[1]);
-                    }
-
+//                    if (arr[0].equals(arr[1])) return;
+                    reportedCount.put(arr[1], reportedCount.getOrDefault(arr[1], 0) + 1);
+                    if (reportedCount.get(arr[1]) >= k) banList.add(arr[1]); 
+                    
+                    HashSet<String> reportedSet = myReportIds.getOrDefault(arr[0], new HashSet<>());
+                    reportedSet.add(arr[1]);
+                    myReportIds.put(arr[0], reportedSet);
                 });
 
-        int[] receiveMailCount = new int[id_list.length];
-
+        int[] answer = new int[id_list.length];
         for (int i = 0; i < id_list.length; i++) {
-            if (!myReportList.containsKey(id_list[i])) continue;
-
-            HashSet<String> myReports = myReportList.get(id_list[i]);
-
-            for (String myReportId : myReports) {
-                if (!reportedCount.containsKey(myReportId)) continue;
-                if (reportedCount.get(myReportId) >= k) receiveMailCount[i]++;
+            HashSet<String> curReportIds = myReportIds.getOrDefault(id_list[i], new HashSet<>());
+            for (String banId : banList) {
+                if (curReportIds.contains(banId)) answer[i]++;
             }
         }
-
-        return receiveMailCount;
+        
+        return answer;
     }
 }
