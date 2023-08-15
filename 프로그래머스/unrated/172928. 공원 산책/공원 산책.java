@@ -1,56 +1,50 @@
 import java.util.*;
 
 class Solution {
-    public int[] solution(String[] park, String[] routes) {
-        Map<String, int[]> moveMap = Map.of(
-                "N", new int[]{-1, 0},
-                "S", new int[]{1, 0},
-                "W", new int[]{0, -1},
-                "E", new int[]{0, 1});
+    Map<String, int[]> moveMap = Map.of(
+            "N", new int[]{-1, 0},
+            "S", new int[]{1, 0},
+            "W", new int[]{0, -1},
+            "E", new int[]{0, 1});
 
+    public int[] solution(String[] park, String[] routes) {
         char[][] parkMatrix = new char[park.length][park[0].length()];
-        int[] start = new int[2];
-        
-        for (int i = 0; i < park.length; i++) {
-            for (int j = 0; j < park[0].length(); j++) {
-                parkMatrix[i][j] = park[i].charAt(j);
-                if (parkMatrix[i][j] == 'S') {
-                    start[0] = i;
-                    start[1] = j;
+        int[] curPoint = new int[2];
+
+        for (int row = 0; row < park.length; row++) {
+            for (int col = 0; col < park[row].length(); col++) {
+                parkMatrix[row][col] = park[row].charAt(col);
+                if (parkMatrix[row][col] == 'S') {
+                    curPoint[0] = row;
+                    curPoint[1] = col;
                 }
             }
         }
 
-        for (int i = 0; i < routes.length; i++) {
-            String[] route = routes[i].split(" ");
-            int[] direction = moveMap.get(route[0]);
-            int moveCount = Integer.parseInt(route[1]);
-            int[] temp = new int[]{start[0], start[1]};
-
-            while (moveCount > 0) {
-                if (!canMove(temp, direction, parkMatrix)) break;
-                temp[0] = temp[0] + direction[0];
-                temp[1] = temp[1] + direction[1];
-                moveCount--;
+        for (String route : routes) {
+            String[] curRoute = route.split(" ");
+            if (canMove(curPoint, parkMatrix, curRoute[0], Integer.parseInt(curRoute[1]))) {
+                curPoint[0] += moveMap.get(curRoute[0])[0] * Integer.parseInt(curRoute[1]);
+                curPoint[1] += moveMap.get(curRoute[0])[1] * Integer.parseInt(curRoute[1]);
             }
-
-            if (moveCount > 0) continue;
-
-            start[0] = temp[0];
-            start[1] = temp[1];
         }
-        
-        return start;
+
+        return curPoint;
     }
 
+    private boolean canMove(int[] curPoint, char[][] parkMatrix, String op, int moveCnt) {
+        if (moveCnt == 0) {
+            return true;
+        }
 
-    private boolean canMove(int[] start, int[] toMove, char[][] parkMatrix) {
-        int maxH = parkMatrix.length - 1;
-        int maxW = parkMatrix[0].length - 1;
+        int nextY = curPoint[0] + moveMap.get(op)[0];
+        int nextX = curPoint[1] + moveMap.get(op)[1];
 
-        int[] next = new int[]{start[0] + toMove[0], start[1] + toMove[1]};
+        if (nextY >= parkMatrix.length || nextY < 0 || nextX >= parkMatrix[nextY].length || nextX < 0 || parkMatrix[nextY][nextX] == 'X') {
+            return false;
+        }
 
-        if (next[0] < 0 || next[0] > maxH || next[1] < 0 || next[1] > maxW) return false;
-        return parkMatrix[next[0]][next[1]] != 'X';
+        int[] nextPoint = new int[]{nextY, nextX};
+        return canMove(nextPoint, parkMatrix, op, moveCnt - 1);
     }
 }
