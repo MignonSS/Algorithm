@@ -1,16 +1,15 @@
 class Solution {
     public int[] solution(String s) {
-        int[] answer = new int[2];
-        int temp;
+        int convertCnt = 0;
+        int removedZeroCnt = 0;
 
         while (!s.equals("1")) {
-            answer[1] += s.length();
-            s = s.replaceAll("0", "");
-            temp = s.length();
-            s = Integer.toBinaryString(temp);
-            answer[0]++;
-            answer[1] -= temp;
+            String temp = s.replaceAll("0", "");
+            removedZeroCnt += (s.length() - temp.length());
+            s = Integer.toBinaryString(temp.length());
+            convertCnt++;
         }
-        return answer;
+
+        return new int[]{convertCnt, removedZeroCnt};
     }
 }
