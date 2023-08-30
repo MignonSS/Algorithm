@@ -1,28 +1,22 @@
 import java.util.*;
 class Solution {
-public int solution(String s) {
+    public int solution(String s) {
+        int count = 0;
 
-        int answer = 0;
-        if (isProper(s)) {
-            answer++;
-        }
-
-        for (int i = 1; i < s.length(); i++) {
+        for (int i = 0; i < s.length(); i++) {
             s = rotationBracket(s);
             if (isProper(s)) {
-                answer++;
+                count++;
             }
         }
 
-        return answer;
+        return count;
     }
 
-    // 괄호 회전
     private String rotationBracket(String s) {
-        return s.substring(1) + s.charAt(0);
+        return new StringBuilder(s).append(s.charAt(0)).deleteCharAt(0).toString();
     }
 
-    // 올바른 괄호 문자열인지 검사
     private boolean isProper(String s) {
         Stack<Character> stack = new Stack<>();
 
@@ -32,13 +26,13 @@ public int solution(String s) {
             } else {
                 switch (s.charAt(i)) {
                     case ')':
-                        isProperBracket(stack, '(');
+                        checkBracket(stack, '(');
                         break;
                     case '}':
-                        isProperBracket(stack, '{');
+                        checkBracket(stack, '{');
                         break;
                     case ']':
-                        isProperBracket(stack, '[');
+                        checkBracket(stack, '[');
                         break;
                 }
             }
@@ -46,7 +40,7 @@ public int solution(String s) {
         return stack.isEmpty();
     }
 
-    private void isProperBracket(Stack<Character> stack, char bracket) {
-        if (stack.peek() == bracket) stack.pop();
+    private void checkBracket(Stack<Character> stack, char c) {
+        if (stack.peek() == c) stack.pop();
     }
 }
