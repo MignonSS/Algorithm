@@ -4,20 +4,9 @@ class Solution {
         Map<String, Integer> map = new HashMap<>();
 
         for (String[] clothe : clothes) {
-            String sort = clothe[1];
-            if (map.containsKey(sort)) {
-                map.replace(sort, map.get(sort) + 1);
-            } else {
-                map.put(sort, 1);
-            }
+            map.put(clothe[1], map.getOrDefault(clothe[1], 0) + 1);
         }
 
-        int count = 1;
-
-        for (Integer value : map.values()) {
-            count *= (value + 1);
-        }
-
-        return count - 1;
+        return map.values().stream().reduce(1, (a, b) -> a * (b + 1)) - 1;
     }
 }
