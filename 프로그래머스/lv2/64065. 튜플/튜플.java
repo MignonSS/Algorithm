@@ -2,19 +2,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 class Solution {
     public int[] solution(String s) {
-        List<String> list = Arrays.stream(s.substring(2, s.length() - 2).split("\\},\\{"))
-                .sorted(Comparator.comparingInt(String::length))
-                .collect(Collectors.toList());
+        String[] strings = s.substring(2, s.length() - 2).split("\\},\\{");
+        Arrays.sort(strings, Comparator.comparingInt(String::length));
 
         List<String> answer = new ArrayList<>();
 
-        for (String str : list) {
+        for (String str : strings) {
             String[] split = str.split(",");
-
-            if (split.length == 1) {
-                answer.add(split[0]);
-                continue;
-            }
 
             for (String str2 : split) {
                 if (!answer.contains(str2)) {
