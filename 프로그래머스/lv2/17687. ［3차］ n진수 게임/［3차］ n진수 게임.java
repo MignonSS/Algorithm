@@ -6,12 +6,12 @@ class Solution {
         int temp = 0;
         String tempStr = "";
         int digitNum = 0;
-        
-        for (int i = 0, j = 0; i < arr.length; i++) {
+
+        for (int i = 0, j = 0; i < t * m; i++) {
             if (digitNum == 0) {
-                tempStr = Integer.toString(temp, n).toUpperCase();
+                tempStr = Integer.toString(temp, n);
             }
-            
+
             arr[i] = tempStr.charAt(digitNum++);
 
             if (digitNum == tempStr.length()) {
@@ -23,7 +23,7 @@ class Solution {
                 answer.append(arr[i]);
             }
         }
-        
-        return answer.toString();
+
+        return answer.toString().toUpperCase();
     }
 }
