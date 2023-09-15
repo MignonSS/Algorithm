@@ -42,13 +42,11 @@ class Car {
     }
 
     public int calculateFee(int defaultTime, int defaultFee, int unitTime, int unitFee) {
-        if (parkingTime <= defaultTime) {
-            this.fee += defaultFee;
-        } else {
+        if (parkingTime > defaultTime) {
             int excessTime = parkingTime - defaultTime;
-            int excessFee = ((int) Math.ceil((double) excessTime / unitTime)) * unitFee;
-            this.fee += (defaultFee + excessFee);
+            this.fee += ((int) Math.ceil((double) excessTime / unitTime)) * unitFee;
         }
-        return this.fee;
+
+        return this.fee + defaultFee;
     }
 }
