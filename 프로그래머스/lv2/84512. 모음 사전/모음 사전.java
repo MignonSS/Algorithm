@@ -1,20 +1,20 @@
 import java.util.*;
 class Solution {
-    private static final char[] CHARS = "AEIOU".toCharArray();
+    static char[] criteria = {'A', 'E', 'I', 'O', 'U'};
+    List<String> wordList = new ArrayList<>();
 
     public int solution(String word) {
-        return generate("").indexOf(word);
+        dfs("");
+        return wordList.indexOf(word);
     }
 
-    private List<String> generate(String word) {
-        List<String> words = new ArrayList<>();
-        words.add(word);
+    private void dfs(String word) {
+        wordList.add(word);
 
-        if (word.length() == 5) return words;
+        if (word.length() == 5) return;
 
-        for (char c : CHARS) {
-            words.addAll(generate(word + c));
+        for (char c : criteria) {
+            dfs(word + c);
         }
-        return words;
     }
 }
