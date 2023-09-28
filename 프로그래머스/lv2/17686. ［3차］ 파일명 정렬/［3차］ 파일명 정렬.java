@@ -1,42 +1,23 @@
 import java.util.*;
+import java.util.regex.*;
 
 class Solution {
     public String[] solution(String[] files) {
-        String[][] arr = new String[files.length][4];
-
-        for (int idx = 0; idx < files.length; idx++) {
-            StringBuilder head = new StringBuilder();
-            StringBuilder number = new StringBuilder();
-            String tail = "";
-            boolean meetNum = false;
-
-            for (int i = 0; i < files[idx].length(); i++) {
-                String curStr = files[idx];
-
-                if (!meetNum && Character.isDigit(curStr.charAt(i))) { // number
-                    while (i < curStr.length() && Character.isDigit(curStr.charAt(i))) {
-                        number.append(curStr.charAt(i++));
-                    }
-                    meetNum = true;
-                } else if (!meetNum) { // head
-                    head.append(files[idx].charAt(i));
-                } else {
-                    tail = files[idx].substring(i);
-                    break;
-                }
-            }
+        Pattern p = Pattern.compile("([a-z\\s.-]+)([0-9]{1,5})");
+        
+        Arrays.sort(files, (s1, s2) -> {
+            Matcher m1 = p.matcher(s1.toLowerCase());
+            Matcher m2 = p.matcher(s2.toLowerCase());
+            m1.find();
+            m2.find();
             
-            arr[idx][0] = head.toString().toUpperCase();
-            arr[idx][1] = number.toString();
-            arr[idx][2] = tail;
-            arr[idx][3] = String.valueOf(idx);
-        }
-
-        return Arrays.stream(arr)
-                .sorted(Comparator
-                        .comparing((String[] a) -> a[0])
-                        .thenComparing((a, b) -> Integer.parseInt(a[1]) - Integer.parseInt(b[1])))
-                .map(v -> files[Integer.parseInt(v[3])])
-                .toArray(String[]::new);
+            if (!m1.group(1).equals(m2.group(1))) {
+                return m1.group(1).compareTo(m2.group(1));
+            } else {
+                return Integer.parseInt(m1.group(2)) - Integer.parseInt(m2.group(2));
+            }
+        });
+        
+        return files;
     }
 }
