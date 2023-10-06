@@ -22,16 +22,13 @@ class Solution {
 	
 	private void dropBlock(int m, int n, char[][] map) {
 		for(int c = 0 ; c < n ; ++c) {
+            int space = 0;
 			for(int r = m - 1 ; r >= 0 ; --r) {
-				if(map[r][c] == '.') {
-					for(int nr = r - 1 ; nr >= 0 ; --nr) {
-						if(map[nr][c] != '.') {
-							map[r][c] = map[nr][c];
-							map[nr][c] = '.';
-							break;
-						}
-					}
-				}
+				if(map[r][c] == '.') space++;
+                else if (map[r][c] != '.' && space != 0) {
+                    map[r + space][c] = map[r][c];
+                    map[r][c] = '.';
+                }
 			}
 		}
 	}
